@@ -4,24 +4,24 @@ class Cliente {
     }
 
     salva(cliente) {
+        if(document.getElementById('codigo').getAttribute('disabled')==='disabled'){
+            this.apaga(cliente.codigo) 
+        }
         this.clientes.push(cliente)
         localStorage.setItem("tbClientes", JSON.stringify(this.clientes))
         alert('Cliente salvo com sucesso!')
         this.limpa()
         return true
     }
-    apaga(id) {
-        
-        let index = this.clientes.map((cliente) => cliente.código).indexOf(id);
-        alert(index)
-        if (index > -1) {
-            this.clientes.splice(index, 1) //o 1o parâmetro é o índice do array e o segundo o número de itens que serão removidos
-            this.clientes = clientes.filter(cliente => cliente.código !== id)
-        }
+    apaga(codigo) { 
+       let index = this.clientes.findIndex(cliente => cliente.codigo == codigo)      
+       this.clientes.splice(index, 1) //o 1o parâmetro é o índice do array e o segundo o número de itens que serão removidos
+       localStorage.setItem("tbClientes", JSON.stringify(this.clientes))
+       cliente.atualiza() 
     }
 
     limpa(){
-        document.getElementById('código').value = ''
+        document.getElementById('codigo').value = ''
         document.getElementById('nome').value = ''
         document.getElementById('cep').value = ''
         document.getElementById('endereco').value = ''
@@ -31,23 +31,28 @@ class Cliente {
     }
 
     edita(cliente){
-        document.getElementById('código').setAttribute('disabled', 'disabled')
-        document.getElementById('código').value = cliente.código
+        document.getElementById('codigo').setAttribute('disabled', 'disabled')
+        document.getElementById('codigo').value = cliente.codigo
         document.getElementById('nome').value = cliente.nome
+        document.getElementById('cep').value = cliente.cep
+        document.getElementById('endereco').value = cliente.endereco
+        document.getElementById('bairro').value = cliente.bairro
+        document.getElementById('cidade').value = cliente.cidade
+        document.getElementById('observacoes').value = cliente.observacoes
 
     }
 
     lista() {
         const listagem = this.clientes.map((cliente) => (
             `<tr>
-                <td>${cliente.código}</td>
+                <td>${cliente.codigo}</td>
                 <td>${cliente.nome}</td>
                 <td>${cliente.cep}</td>
                 <td>${cliente.endereco}</td>
                 <td>${cliente.bairro}</td>
                 <td>${cliente.cidade}</td>
                 <td>${cliente.observacoes}</td>
-                <td><button id='apagar' onClick='cliente.apaga(${cliente.código})'>🗑️Apagar</button>
+                <td><button id='apagar' onClick='cliente.apaga(${cliente.codigo})'>🗑️Apagar</button>
                     <button id='editar' onClick='cliente.edita(${JSON.stringify(cliente)})'>📝Editar</button>
                 </td>    
             </tr>`
@@ -72,6 +77,10 @@ class Cliente {
         )
     }
 
+    atualiza(){     
+        document.getElementById('listagem').innerHTML = cliente.lista()
+    }
+
 }
 //instanciamos novo objeto
 const cliente = new Cliente()
@@ -79,7 +88,7 @@ const cliente = new Cliente()
 //tratamos o botão salvar
 document.getElementById('salvar').onclick = function () {
     const registro = {
-        código: document.getElementById('código').value,
+        codigo: document.getElementById('codigo').value,
         nome: document.getElementById('nome').value,
         cep: document.getElementById('cep').value,
         endereco: document.getElementById('endereco').value,
@@ -93,5 +102,5 @@ document.getElementById('salvar').onclick = function () {
 
 //tratamos a listagem
 window.onload = function() {
-    document.getElementById('listagem').outerHTML = cliente.lista()    
+    cliente.atualiza()   
 }
