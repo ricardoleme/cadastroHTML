@@ -1,6 +1,37 @@
 class Cliente {
     constructor() {
         this.clientes = localStorage.getItem("tbClientes") === null ? [] : JSON.parse(localStorage.getItem("tbClientes"))
+        //exemplo de Marcas
+        localStorage.setItem("tbMarcas",
+        JSON.stringify([
+            {
+              "id": 1,
+              "nome": "Gucci"
+            },
+            {
+              "id": 2,
+              "nome": "Lacoste"
+            },
+            {
+              "id": 3,
+              "nome": "Nike"
+            }
+          ]
+          ))
+          //Carregando outra tabela
+          this.parsedMarcas = JSON.parse(localStorage.getItem('tbMarcas')) || [];
+         
+          
+            const select = document.getElementById('marcas');
+          
+            for (const marca of this.parsedMarcas) {
+              const option = document.createElement('option');
+              option.value = marca.id;
+              option.textContent = marca.nome;
+          
+              select.appendChild(option);
+            
+          }
     }
 
     salva(cliente) {
@@ -27,6 +58,7 @@ class Cliente {
         document.getElementById('endereco').value = ''
         document.getElementById('bairro').value = ''
         document.getElementById('cidade').value = ''
+        document.getElementById('marcas').value = ''
         document.getElementById('observacoes').value = ''
     }
 
@@ -38,6 +70,7 @@ class Cliente {
         document.getElementById('endereco').value = cliente.endereco
         document.getElementById('bairro').value = cliente.bairro
         document.getElementById('cidade').value = cliente.cidade
+        document.getElementById('marcas').value = cliente.marcas
         document.getElementById('observacoes').value = cliente.observacoes
 
     }
@@ -52,6 +85,7 @@ class Cliente {
                 <td>${cliente.bairro}</td>
                 <td>${cliente.cidade}</td>
                 <td>${cliente.observacoes}</td>
+                <td>${cliente.marca.nome || null}</td>
                 <td><button id='apagar' onClick='cliente.apaga(${cliente.codigo})'>🗑️Apagar</button>
                     <button id='editar' onClick='cliente.edita(${JSON.stringify(cliente)})'>📝Editar</button>
                 </td>    
@@ -68,6 +102,7 @@ class Cliente {
                 <th>Bairro</th>
                 <th>Cidade</th>
                 <th>Observações</th>
+                <th>Marca</th>
                 <th>Opções</th>
             </thead>
             <tbody>
@@ -86,7 +121,7 @@ class Cliente {
 const cliente = new Cliente()
 
 //tratamos o botão salvar
-document.getElementById('salvar').onclick = function () {
+document.getElementById('frmCliente').onsubmit= function () {
     const registro = {
         codigo: document.getElementById('codigo').value,
         nome: document.getElementById('nome').value,
@@ -94,6 +129,7 @@ document.getElementById('salvar').onclick = function () {
         endereco: document.getElementById('endereco').value,
         bairro: document.getElementById('bairro').value,
         cidade: document.getElementById('cidade').value,
+        marca: cliente.parsedMarcas.find(marca => marca.id == document.getElementById('marcas').value),
         observacoes: document.getElementById('observacoes').value
     }
     cliente.salva(registro)
@@ -104,3 +140,6 @@ document.getElementById('salvar').onclick = function () {
 window.onload = function() {
     cliente.atualiza()   
 }
+
+
+  

@@ -14,18 +14,18 @@
         <a href="#clientes">Clientes</a>
     </div>
     <div class="form">
-        <form name="frmCliente">
+        <form id="frmCliente">
         <fieldset>
             <legend>Cadastro de Clientes</legend>
             <div class="form-group">
                 <label>Código</label>
-                <input class="input-control" type="number" size="5" id="codigo" />
+                <input class="input-control" type="number" size="5" id="codigo" required />
 
                 <label class="right-inline">Nome</label>
-                <input class="input-control" type="text" size="40" id="nome" />
+                <input class="input-control" type="text" size="40" id="nome" required />
 
                 <label class="right-inline">CEP</label>
-                <input class="input-control" type="text" size="10" id="cep" >
+                <input class="input-control" type="text" size="10" id="cep" required pattern="[0-9]{8}" title="Informe o CEP sem pontos" maxlength="8">
             </div>
             <div class="form-group">
                 <label>Endereço</label>
@@ -41,6 +41,12 @@
                 <label>Observações</label>
                 <textarea class="input-control" id="observacoes"></textarea>
             </div>
+            <div class="form-group">
+                <label>Marca Preferida</label>
+                <select id="marcas" class="form-control">
+                    <option value="">Selecione a marca</option>
+                  </select>
+                  </div>
             <div class="form-group">
                 <label>&nbsp;</label>
                 <button id='salvar'>💾 Salvar</button>
